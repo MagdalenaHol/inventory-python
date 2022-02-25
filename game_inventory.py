@@ -1,5 +1,6 @@
 
 import csv
+from tkinter.ttk import Separator
 
 inventory = {"gold coin": 45, "arrow": 12, "torch": 6, "dagger": 2, "rope": 1, "ruby": 1}
 added_items = ["arrow", "dagger", "sliver coin"] 
@@ -39,7 +40,7 @@ def print_table(inventory, order):
     list_of_keys = inventory.keys()
     longest_string = max(list_of_keys, key=len)
     longest_string_len = len(longest_string)
-    
+
     output = (f'{str(header[0]).rjust(longest_string_len)} | {header[1].rjust(5)}')
     print("-" * (len(output) + len(header)))
     print(output)
@@ -61,32 +62,26 @@ def print_table(inventory, order):
 
 
 
-def import_inventory(inventory, filename):
+def import_inventory(inventory, filename="test_inventory.csv"):
 
     results = []
 
-    with open(filename, "r") as f:
+    with open("test_inventory.csv", "r") as f:
         file = csv.reader(f)
         for line in file:
             for item in line:
                 results.append(item)
+            add_to_inventory(inventory, results)
+            print_table(inventory, results)   
+            
 
-    print(results)
-    add_to_inventory(inventory, results)
+def export_inventory(inventory, filename="test_inventory_export.csv"):
     
-
-
-list_value_inventory = list(inventory.values())
-list_key_inventory = list(inventory)
-
-
-def export_inventory(inventory, filename):
-    
-    with open(filename, "w") as items_export_file:
+    with open("test_inventory_export.csv", "w") as items_export_file:
         
         filednames = ["item_name", "value_of_item"]
 
-        items_to_write = csv.DictWriter(items_export_file, filednames=filednames)
+        items_to_write = csv.DictWriter(items_export_file, filename="test_inventory_export.csv")
 
         i = 0
         while i < len(list_key_inventory):
@@ -94,8 +89,10 @@ def export_inventory(inventory, filename):
             i += 1
 
 
-# export_inventory(inventory, "test_inventory.csv")
+
 print(display_inventory(inventory))
 print(add_to_inventory(inventory, added_items))
 print(remove_from_inventory(inventory, removed_items))
 print_table(inventory, "count,desc")
+print(import_inventory(inventory, filename="test_inventory.csv"))
+# export_inventory(inventory, filename="test_inventory_export.csv")
