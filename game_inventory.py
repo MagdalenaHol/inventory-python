@@ -1,6 +1,6 @@
 
 import csv
-from tkinter.ttk import Separator
+
 
 inventory = {"gold coin": 45, "arrow": 12, "torch": 6, "dagger": 2, "rope": 1, "ruby": 1}
 added_items = ["arrow", "dagger", "sliver coin"] 
@@ -10,7 +10,7 @@ removed_items = ["arrow", "gold coin", "arrow", "dagger", "dagger"]
 def display_inventory(inventory):
 
     for key in inventory:
-        print(f"\n{key}: {int(inventory[key])}")
+        print(f"{key}: {int(inventory[key])}")
         if None in inventory:
             return None
         
@@ -47,7 +47,7 @@ def print_table(inventory, order):
     print("-" * (len(output) +len(header)))
 
 
-    if order == " count,desc": 
+    if order == "count,desc": 
         inventory = sorted(inventory.items(), key=lambda count: count[1], reverse=True)
         inventory = dict(inventory)
     elif order == "count,asc":
@@ -73,26 +73,22 @@ def import_inventory(inventory, filename="test_inventory.csv"):
                 results.append(item)
             add_to_inventory(inventory, results)
             print_table(inventory, results)   
-            
+
 
 def export_inventory(inventory, filename="test_inventory_export.csv"):
-    
-    with open("test_inventory_export.csv", "w") as items_export_file:
+
         
-        filednames = ["item_name", "value_of_item"]
+        list_of_keys = inventory.keys()
+        with open(filename, "w") as f:      
+            f.write(str(list_of_keys).replace("[","").replace("dict_keys","").replace("(","").replace("]","").replace(")","").replace("'","").replace(", ",","))
+       
+    
+   
 
-        items_to_write = csv.DictWriter(items_export_file, filename="test_inventory_export.csv")
-
-        i = 0
-        while i < len(list_key_inventory):
-            items_to_write.writerow({"item_name": list_key_inventory[i], "value_of_item": list_value_inventory[i]})
-            i += 1
-
-
-
-print(display_inventory(inventory))
-print(add_to_inventory(inventory, added_items))
-print(remove_from_inventory(inventory, removed_items))
-print_table(inventory, "count,desc")
-print(import_inventory(inventory, filename="test_inventory.csv"))
+# print(display_inventory(inventory))
+# print(add_to_inventory(inventory, added_items))
+# print(remove_from_inventory(inventory, removed_items))
+# print(print_table(inventory, "count,desc"))
+# print(print_table(inventory, "count,asc"))
+# print(import_inventory(inventory, filename="test_inventory.csv"))
 # export_inventory(inventory, filename="test_inventory_export.csv")
