@@ -1,18 +1,18 @@
 
 import csv
 
-
 inventory = {"gold coin": 45, "arrow": 12, "torch": 6, "dagger": 2, "rope": 1, "ruby": 1}
+added_items = ["arrow", "dagger", "sliver coin"] 
+removed_items = ["arrow", "gold coin", "arrow", "dagger", "dagger"]
 
 
 def display_inventory(inventory):
 
     for key in inventory:
-        print(f"""\n{key}: {inventory[key]}""")
+        print(f"\n{key}: {int(inventory[key])}")
         if None in inventory:
             return None
         
-
 def add_to_inventory(inventory, added_items):
     
     for element in added_items:
@@ -20,14 +20,7 @@ def add_to_inventory(inventory, added_items):
             inventory[element] += 1
         else:
             inventory.setdefault(element, 1)
-
-
-added_items = ["arrow", "brain", "koziol", "gold coin", "arrow"] 
    
-# add_to_inventory(inventory, added_items)
-# display_inventory(inventory)
-    
-
 def remove_from_inventory(inventory, removed_items):
     
     for element in removed_items:
@@ -39,33 +32,33 @@ def remove_from_inventory(inventory, removed_items):
             del inventory[element]
 
 
-removed_items = ["arrow", "gold coin", "arrow", "dagger", "dagger", "dagger"]
-
-
-# remove_from_inventory(inventory, removed_items)
-# display_inventory(inventory)
-
-
 def print_table(inventory, order):
-
     header = ["item name", "count"]
     output = ""
-    print("\n-------------------------")
-    for item in header:
-        output = "  "  + str(header[0]  +  " | " + header[1]) +  " " 
+    
+    list_of_keys = inventory.keys()
+    longest_string = max(list_of_keys, key=len)
+    longest_string_len = len(longest_string)
+    
+    output = (f'{str(header[0]).rjust(longest_string_len)} | {header[1].rjust(5)}')
+    print("-" * (len(output) + len(header)))
     print(output)
-    print("-------------------------")
+    print("-" * (len(output) +len(header)))
 
-    if order == " count, desc": 
+
+    if order == " count,desc": 
         inventory = sorted(inventory.items(), key=lambda count: count[1], reverse=True)
         inventory = dict(inventory)
-
+    elif order == "count,asc":
+        inventory = sorted(inventory.items(), key=lambda count: count[1], reverse=False)
+        inventory = dict(inventory)
+    elif order == None:
+        inventory = inventory.items()
+    
     for key, value in inventory.items():
-        print(f"{key:>11} | {value:>5}")
-    print("-------------------------")
+        print(f"{str(key).rjust(longest_string_len)} | {value:5}")
+    print("-" * (len(header) + len(output)))
 
-
-# print_table(inventory, "count, desc")
 
 
 def import_inventory(inventory, filename):
@@ -81,10 +74,6 @@ def import_inventory(inventory, filename):
     print(results)
     add_to_inventory(inventory, results)
     
-
-import_inventory(inventory, "import_inventory.csv")
-display_inventory(inventory)
-print_table(inventory, "count, desc")
 
 
 list_value_inventory = list(inventory.values())
@@ -105,6 +94,8 @@ def export_inventory(inventory, filename):
             i += 1
 
 
-export_inventory(inventory, "test_inventory.csv")
-display_inventory(inventory)
-print_table(inventory, "count, desc")
+# export_inventory(inventory, "test_inventory.csv")
+print(display_inventory(inventory))
+print(add_to_inventory(inventory, added_items))
+print(remove_from_inventory(inventory, removed_items))
+print_table(inventory, "count,desc")
